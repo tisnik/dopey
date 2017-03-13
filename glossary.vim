@@ -11,10 +11,20 @@ function! ParseWord(sources, classes, inputLine)
     "                           magic  ID    TERM         DESCRIPTION  CLASS USE   INCORRECT    CORRECT      SEE ALSO     INTERNAL + VERIFIED + COPYRIGHTED + SOURCE
     let l1 = matchlist(a:inputLine, '\v(\d+),''([^'']+)'',''([^'']*)'',(\d+),(\d+),''([^'']*)'',''([^'']*)'',''([^'']*)'',(\d+,\d+,\d+,\d+)')
 
+    if empty(l1)
+        echohl ErrorMsg | echo a:inputLine | echohl Normal
+        return {}
+    endif
+
     " we use more than 9 groups in one regexp
     " this means that remaining groups has to be handled separately
     let second_part=l1[9]
     let l2 = matchlist(second_part, '\v(\d+),(\d+),(\d+),(\d+)')
+
+    if empty(l2)
+        echohl ErrorMsg | echo a:inputLine | echohl Normal
+        return {}
+    endif
 
     return {"term" :        l1[2],
            \"description" : l1[3],
