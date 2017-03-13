@@ -39,3 +39,22 @@ function! ParseWord(sources, classes, inputLine)
            \"source"      : a:sources[l2[3]]}
 endfunction
 
+function! ParseGlossary(sources, classes, glossaryTextFile)
+    let words = map(a:glossaryTextFile, 'ParseWord(a:sources, a:classes, v:val)')
+    call filter(words, '!empty(v:val)')
+    return words
+endfunction
+
+function! Setup()
+    let s:dataFiles = ReadDataFiles("sources.txt", "classes.txt", "glossary.txt")
+    let s:glossary = ParseGlossary(s:dataFiles.sources, s:dataFiles.classes, s:dataFiles.glossary)
+    echo "Number of terms read: " . len(s:glossary)
+
+    "echo len(sources)
+    "echo len(classes)
+    "echo len(input)
+endfunction
+
+call Setup()
+
+
