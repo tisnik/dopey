@@ -7,3 +7,25 @@ function! ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
            \"glossary" : glossary}
 endfunction
 
+function! ParseWord(sources, classes, inputLine)
+    "                           magic  ID    TERM         DESCRIPTION  CLASS USE   INCORRECT    CORRECT      SEE ALSO     INTERNAL + VERIFIED + COPYRIGHTED + SOURCE
+    let l1 = matchlist(a:inputLine, '\v(\d+),''([^'']+)'',''([^'']*)'',(\d+),(\d+),''([^'']*)'',''([^'']*)'',''([^'']*)'',(\d+,\d+,\d+,\d+)')
+
+    " we use more than 9 groups in one regexp
+    " this means that remaining groups has to be handled separately
+    let second_part=l1[9]
+    let l2 = matchlist(second_part, '\v(\d+),(\d+),(\d+),(\d+)')
+
+    return {"term" :        l1[2],
+           \"description" : l1[3],
+           \"class"       : a:classes[l1[4]],
+           \"use"         : l1[5],
+           \"incorrect"   : l1[6],
+           \"correct"     : l1[7],
+           \"see"         : l1[8],
+           \"internal"    : l2[0],
+           \"verified"    : l2[1],
+           \"copyrighted" : l2[2],
+           \"source"      : a:sources[l2[3]]}
+endfunction
+
