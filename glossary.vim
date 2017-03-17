@@ -1,4 +1,4 @@
-function! ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
+function! s:ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
     let sources = readfile(a:sourcesFileName)
     let classes = readfile(a:classesFileName)
     let glossary = readfile(a:glossaryFileName)
@@ -7,7 +7,7 @@ function! ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
            \"glossary" : glossary}
 endfunction
 
-function! ParseWord(sources, classes, inputLine)
+function! s:ParseWord(sources, classes, inputLine)
     "                           magic  ID    TERM         DESCRIPTION  CLASS USE   INCORRECT    CORRECT      SEE ALSO     INTERNAL + VERIFIED + COPYRIGHTED + SOURCE
     let l1 = matchlist(a:inputLine, '\v(\d+),''([^'']+)'',''([^'']*)'',(\d+),(\d+),''([^'']*)'',''([^'']*)'',''([^'']*)'',(\d+,\d+,\d+,\d+)')
 
@@ -39,13 +39,13 @@ function! ParseWord(sources, classes, inputLine)
            \"source"      : a:sources[l2[3]]}
 endfunction
 
-function! ParseGlossary(sources, classes, glossaryTextFile)
-    let terms = map(a:glossaryTextFile, 'ParseWord(a:sources, a:classes, v:val)')
+function! s:ParseGlossary(sources, classes, glossaryTextFile)
+    let terms = map(a:glossaryTextFile, 's:ParseWord(a:sources, a:classes, v:val)')
     call filter(terms, '!empty(v:val)')
     return terms
 endfunction
 
-function! GetMaxWordsInTerms(glossary)
+function! s:GetMaxWordsInTerms(glossary)
     let maxWords = 0
     for g in a:glossary
         let term = g.term
@@ -58,10 +58,10 @@ function! GetMaxWordsInTerms(glossary)
     return maxWords
 endfunction
 
-function! Setup()
-    let s:dataFiles = ReadDataFiles("sources.txt", "classes.txt", "glossary.txt")
-    let s:glossary = ParseGlossary(s:dataFiles.sources, s:dataFiles.classes, s:dataFiles.glossary)
-    let s:maxWords = GetMaxWordsInTerms(s:glossary)
+function! s:Setup()
+    let s:dataFiles = s:ReadDataFiles("sources.txt", "classes.txt", "glossary.txt")
+    let s:glossary = s:ParseGlossary(s:dataFiles.sources, s:dataFiles.classes, s:dataFiles.glossary)
+    let s:maxWords = s:GetMaxWordsInTerms(s:glossary)
     echo "Number of terms read: " . len(s:glossary)
     echo "Max words in terms:   " . s:maxWords
 
@@ -70,10 +70,11 @@ function! Setup()
     "echo len(input)
 endfunction
 
-call Setup()
+call s:Setup()
 
+echo s:glossary[20]
 
-function! Take(list, cnt)
+function! s:Take(list, cnt)
     let result = []
     for i in range(0, a:cnt-1)
         if i < len(a:list)
@@ -83,7 +84,7 @@ function! Take(list, cnt)
     return result
 endfunction
 
-function! ReadWordsTillEoln()
+function! s:ReadWordsTillEoln()
     execute("normal!ma")
     let oldRegValue = @"
     execute("normal!vaw$y")
@@ -93,22 +94,33 @@ function! ReadWordsTillEoln()
     return result
 endfunction
 
-function! ReadWords(wordsToReturn)
-    let wordsTillEoln = ReadWordsTillEoln()
+function! s:ReadWords(wordsToReturn)
+    let wordsTillEoln = s:ReadWordsTillEoln()
     let words = split(wordsTillEoln, " ")
     if len(words) < a:wordsToReturn
         return ""
     endif
-    let result = Take(words, a:wordsToReturn)
+    let result = s:Take(words, a:wordsToReturn)
     return join(result, " ")
 endfunction
 
 function! SearchGlossary()
     for i in range(1, s:maxWords)
-        let words = ReadWords(i)
+        let words = s:ReadWords(i)
         if words != ""
             echo words
         endif
     endfor
 endfunction
 
+"echohl ErrorMsg
+"|
+"echohl
+"expand(<cword>)
+"
+"let line=getline('.')
+"col('.')
+"col('$')
+"string[from:to]
+"execute("normal!\"xy2aw")
+"fds fd two words fds fd a
