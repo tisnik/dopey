@@ -40,9 +40,22 @@ function! ParseWord(sources, classes, inputLine)
 endfunction
 
 function! ParseGlossary(sources, classes, glossaryTextFile)
-    let words = map(a:glossaryTextFile, 'ParseWord(a:sources, a:classes, v:val)')
-    call filter(words, '!empty(v:val)')
-    return words
+    let terms = map(a:glossaryTextFile, 'ParseWord(a:sources, a:classes, v:val)')
+    call filter(terms, '!empty(v:val)')
+    return terms
+endfunction
+
+function! GetMaxWordsInTerms(glossary)
+    let maxWords = 0
+    for g in a:glossary
+        let term = g.term
+        let words = split(term, " ")
+        let numWords = len(words)
+        if numWords > maxWords
+            let maxWords = numWords
+        endif
+    endfor
+    return maxWords
 endfunction
 
 function! Setup()
