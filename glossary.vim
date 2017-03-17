@@ -61,7 +61,9 @@ endfunction
 function! Setup()
     let s:dataFiles = ReadDataFiles("sources.txt", "classes.txt", "glossary.txt")
     let s:glossary = ParseGlossary(s:dataFiles.sources, s:dataFiles.classes, s:dataFiles.glossary)
+    let s:maxWords = GetMaxWordsInTerms(s:glossary)
     echo "Number of terms read: " . len(s:glossary)
+    echo "Max words in terms:   " . s:maxWords
 
     "echo len(sources)
     "echo len(classes)
