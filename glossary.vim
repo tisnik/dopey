@@ -93,3 +93,22 @@ function! ReadWordsTillEoln()
     return result
 endfunction
 
+function! ReadWords(wordsToReturn)
+    let wordsTillEoln = ReadWordsTillEoln()
+    let words = split(wordsTillEoln, " ")
+    if len(words) < a:wordsToReturn
+        return ""
+    endif
+    let result = Take(words, a:wordsToReturn)
+    return join(result, " ")
+endfunction
+
+function! SearchGlossary()
+    for i in range(1, s:maxWords)
+        let words = ReadWords(i)
+        if words != ""
+            echo words
+        endif
+    endfor
+endfunction
+
