@@ -83,3 +83,13 @@ function! Take(list, cnt)
     return result
 endfunction
 
+function! ReadWordsTillEoln()
+    execute("normal!ma")
+    let oldRegValue = @"
+    execute("normal!vaw$y")
+    let result = @"
+    let @" = oldRegValue
+    execute("normal!`a")
+    return result
+endfunction
+
