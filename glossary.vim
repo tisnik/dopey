@@ -84,13 +84,21 @@ function! s:Take(list, cnt)
     return result
 endfunction
 
-function! s:ReadWordsTillEoln()
+function! s:SaveCursorPosition()
     execute("normal!ma")
+endfunction
+
+function! s:RestoreCursorPosition()
+    execute("normal!`a")
+endfunction
+
+function! s:ReadWordsTillEoln()
+    call s:SaveCursorPosition()
     let oldRegValue = @"
     execute("normal!vaw$y")
     let result = @"
     let @" = oldRegValue
-    execute("normal!`a")
+    call s:RestoreCursorPosition()
     return result
 endfunction
 
