@@ -73,3 +73,13 @@ endfunction
 call Setup()
 
 
+function! Take(list, cnt)
+    let result = []
+    for i in range(0, a:cnt-1)
+        if i < len(a:list)
+            call add(result, get(a:list, i))
+        endif
+    endfor
+    return result
+endfunction
+
