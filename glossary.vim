@@ -45,12 +45,16 @@ function! s:ParseGlossary(sources, classes, glossaryTextFile)
     return terms
 endfunction
 
+function! s:GetNumWordsInTerm(term)
+    let words = split(a:term, " ")
+    let numWords = len(words)
+    return numWords
+endfunction
+
 function! s:GetMaxWordsInTerms(glossary)
     let maxWords = 0
     for g in a:glossary
-        let term = g.term
-        let words = split(term, " ")
-        let numWords = len(words)
+        let numWords = s:GetNumWordsInTerm(g.term)
         if numWords > maxWords
             let maxWords = numWords
         endif
