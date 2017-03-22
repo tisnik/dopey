@@ -1,8 +1,14 @@
-" Read data from the three input text files. Return a map with a read content.
+" Please see :help fnamemodify :help filename-modifers
+let s:script_path = fnamemodify(resolve(expand("<sfile>")), ":h")
+echo s:script_path
+
 function! s:ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
-    let sources = readfile(a:sourcesFileName)
-    let classes = readfile(a:classesFileName)
-    let glossary = readfile(a:glossaryFileName)
+    let path1 = s:script_path . "/" . a:sourcesFileName
+    let path2 = s:script_path . "/" . a:classesFileName
+    let path3 = s:script_path . "/" . a:glossaryFileName
+    let sources = readfile(path1)
+    let classes = readfile(path2)
+    let glossary = readfile(path3)
     return {"sources"  : sources,
            \"classes"  : classes,
            \"glossary" : glossary}
