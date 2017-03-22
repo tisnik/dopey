@@ -112,6 +112,16 @@ function! s:ReadWords(wordsToReturn)
     return join(result, " ")
 endfunction
 
+function! s:YesNoCaution(title, value)
+    if a:value == 1
+        echohl Comment | echon a:title | echohl Question | echon "yes" | echohl None
+    elseif a:value == 0
+        echohl Comment | echon a:title | echohl ErrorMsg | echon "no" | echohl None
+    else
+        echohl Comment | echon a:title | echohl WarningMsg | echon "with caution" | echohl None
+    endif
+endfunction
+
 function! SearchGlossary()
     for i in range(1, s:maxWords)
         let words = s:ReadWords(i)
