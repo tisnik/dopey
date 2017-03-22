@@ -74,10 +74,6 @@ function! s:Setup()
     "echo len(input)
 endfunction
 
-call s:Setup()
-
-echo s:glossary[20]
-
 function! s:Take(list, cnt)
     let result = []
     for i in range(0, a:cnt-1)
@@ -124,6 +120,10 @@ function! SearchGlossary()
         endif
     endfor
 endfunction
+
+call s:Setup()
+
+echo s:glossary[20]
 
 "echohl ErrorMsg
 "|
