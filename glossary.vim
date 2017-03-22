@@ -122,6 +122,21 @@ function! s:YesNoCaution(title, value)
     endif
 endfunction
 
+function! s:ShowTerm(term)
+    echohl Comment | echo "Term: " | echohl Question | echon a:term.term | echohl None
+    echohl Comment | echo "Description: " | echohl Question | echon a:term.description | echohl None
+    echohl Comment | echo "Class: " | echohl Question | echon a:term.class | echohl None
+    call s:YesNoCaution("  Use: ", a:term.use)
+    call s:YesNoCaution("  Internal: ", a:term.internal)
+    call s:YesNoCaution("  Verified: ", a:term.verified)
+    call s:YesNoCaution("  Copyrighted: ", a:term.copyrighted)
+    echohl Comment | echo "Correct: " | echohl Question | echon a:term.correct | echohl None
+    echohl Comment | echo "Incorrect: " | echohl Question | echon a:term.incorrect | echohl None
+    echohl Comment | echo "See: " | echohl Question | echon a:term.see | echohl None
+    echohl Comment | echo "Source: " | echohl Question | echon a:term.source | echohl None
+    echo "\n"
+endfunction
+
 function! SearchGlossary()
     for i in range(1, s:maxWords)
         let words = s:ReadWords(i)
