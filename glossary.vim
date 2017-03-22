@@ -150,23 +150,24 @@ function! s:ShowTerm(term)
 endfunction
 
 function! s:FindTermInGlossary(word)
-    let found=0
+    let found = 0
     for term in s:glossary
         if term.term == a:word
             call s:ShowTerm(term)
-            let found=1
+            let found = 1
         end
     endfor
     return found
 endfunction
 
+" This is the only function residing in the global namespace.
 function! SearchGlossary()
-    let found=0
+    let found = 0
     for i in range(1, s:maxWords)
         let words = s:ReadWords(i)
         if words != ""
             if s:FindTermInGlossary(words)
-                let found=1
+                let found = 1
                 break
             endif
         endif
@@ -176,6 +177,8 @@ function! SearchGlossary()
     endif
 endfunction
 
+" Read and parse glossary and map the SearchGlossary function to given
+" keystroke
 call s:Setup()
 map <F12> :call SearchGlossary()<cr>
 
