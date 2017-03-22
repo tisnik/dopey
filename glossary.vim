@@ -122,6 +122,8 @@ function! SearchGlossary()
 endfunction
 
 call s:Setup()
+map <F12> :call SearchGlossary()<cr>
+
 
 echo s:glossary[20]
 
