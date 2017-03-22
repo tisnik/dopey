@@ -137,6 +137,17 @@ function! s:ShowTerm(term)
     echo "\n"
 endfunction
 
+function! s:FindTermInGlossary(word)
+    let found=0
+    for term in s:glossary
+        if term.term == a:word
+            call s:ShowTerm(term)
+            let found=1
+        end
+    endfor
+    return found
+endfunction
+
 function! SearchGlossary()
     for i in range(1, s:maxWords)
         let words = s:ReadWords(i)
@@ -149,17 +160,7 @@ endfunction
 call s:Setup()
 map <F12> :call SearchGlossary()<cr>
 
+"fds abend fd two words fds fd a
 
 echo s:glossary[20]
 
-"echohl ErrorMsg
-"|
-"echohl
-"expand(<cword>)
-"
-"let line=getline('.')
-"col('.')
-"col('$')
-"string[from:to]
-"execute("normal!\"xy2aw")
-"fds fd two words fds fd a
