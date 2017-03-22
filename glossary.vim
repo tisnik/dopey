@@ -149,18 +149,28 @@ function! s:FindTermInGlossary(word)
 endfunction
 
 function! SearchGlossary()
+    let found=0
     for i in range(1, s:maxWords)
         let words = s:ReadWords(i)
         if words != ""
-            echo words
+            if s:FindTermInGlossary(words)
+                let found=1
+                break
+            endif
         endif
     endfor
+    if !found
+        echo "Term not found in the glossary"
+    endif
 endfunction
 
 call s:Setup()
 map <F12> :call SearchGlossary()<cr>
 
 "fds abend fd two words fds fd a
+"file name fdsafsa
 
-echo s:glossary[20]
+"file name fdsafsa
+"file name
+"abend about
 
