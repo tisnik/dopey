@@ -1,3 +1,4 @@
+" Read data from the three input text files. Return a map with a read content.
 function! s:ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
     let sources = readfile(a:sourcesFileName)
     let classes = readfile(a:classesFileName)
@@ -7,10 +8,13 @@ function! s:ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
            \"glossary" : glossary}
 endfunction
 
+" Parse word + description from the line read from input file. Return word
+" metadata as a map.
 function! s:ParseWord(sources, classes, inputLine)
     "                           magic  ID    TERM         DESCRIPTION  CLASS USE   INCORRECT    CORRECT      SEE ALSO     INTERNAL + VERIFIED + COPYRIGHTED + SOURCE
     let l1 = matchlist(a:inputLine, '\v(\d+),''([^'']+)'',''([^'']*)'',(\d+),(\d+),''([^'']*)'',''([^'']*)'',''([^'']*)'',(\d+,\d+,\d+,\d+)')
 
+    " check if line can be parsed.
     if empty(l1)
         echohl ErrorMsg | echo a:inputLine | echohl Normal
         return {}
@@ -21,6 +25,7 @@ function! s:ParseWord(sources, classes, inputLine)
     let second_part=l1[9]
     let l2 = matchlist(second_part, '\v(\d+),(\d+),(\d+),(\d+)')
 
+    " check if second part of line can be parsed
     if empty(l2)
         echohl ErrorMsg | echo a:inputLine | echohl Normal
         return {}
@@ -39,6 +44,7 @@ function! s:ParseWord(sources, classes, inputLine)
            \"source"      : a:sources[l2[3]]}
 endfunction
 
+" Parse the whole glossary (all lines).
 function! s:ParseGlossary(sources, classes, glossaryTextFile)
     let terms = map(a:glossaryTextFile, 's:ParseWord(a:sources, a:classes, v:val)')
     call filter(terms, '!empty(v:val)')
