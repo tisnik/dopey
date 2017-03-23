@@ -39,7 +39,7 @@ function! s:ParseWord(sources, classes, inputLine)
 
     return {"term" :        l1[2],
            \"description" : l1[3],
-           \"class"       : a:classes[l1[4]],
+           \"class"       : a:classes[l1[4]-1],
            \"use"         : l1[5],
            \"incorrect"   : l1[6],
            \"correct"     : l1[7],
@@ -47,7 +47,7 @@ function! s:ParseWord(sources, classes, inputLine)
            \"internal"    : l2[0],
            \"verified"    : l2[1],
            \"copyrighted" : l2[2],
-           \"source"      : a:sources[l2[3]]}
+           \"source"      : a:sources[l2[3]-1]}
 endfunction
 
 " Parse the whole glossary (all lines).
