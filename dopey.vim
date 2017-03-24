@@ -152,7 +152,8 @@ endfunction
 function! s:FindTermInGlossary(word)
     let found = 0
     for term in s:glossary
-        if term.term == a:word
+        " use noignorecase comparison
+        if term.term ==? a:word
             call s:ShowTerm(term)
             let found = 1
         end
