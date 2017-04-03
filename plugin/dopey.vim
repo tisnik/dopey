@@ -1,6 +1,6 @@
 " Please see :help fnamemodify :help filename-modifers
 let s:script_path = fnamemodify(resolve(expand("<sfile>")), ":h")
-echo s:script_path
+if s:debug == 1 | echo s:script_path | end
 
 function! s:ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
     let path1 = s:script_path . "/" . a:sourcesFileName
@@ -78,8 +78,10 @@ function! s:Setup()
     let s:dataFiles = s:ReadDataFiles("sources.txt", "classes.txt", "glossary.txt")
     let s:glossary = s:ParseGlossary(s:dataFiles.sources, s:dataFiles.classes, s:dataFiles.glossary)
     let s:maxWords = s:GetMaxWordsInTerms(s:glossary)
-    echo "Number of terms read: " . len(s:glossary)
-    echo "Max words in terms:   " . s:maxWords
+    if s:debug == 1
+        echo "Number of terms read: " . len(s:glossary)
+        echo "Max words in terms:   " . s:maxWords
+    end
 
     "echo len(sources)
     "echo len(classes)
@@ -186,7 +188,7 @@ map <F12> :call SearchGlossary()<cr>
 "fds abend fd two words fds fd a
 "file name fdsafsa
 
-"file name fdsafsa
+"file name fdsafsa abort
 "file name
 "abend about
 
