@@ -1,7 +1,11 @@
-" Please see :help fnamemodify :help filename-modifers
+
+" The s:script_path variable must be initialized OUTSIDE any function. For
+" further information Please see :help fnamemodify :help filename-modifers
 let s:script_path = fnamemodify(resolve(expand("<sfile>")), ":h")
 if s:debug == 1 | echo s:script_path | end
 
+" Read all three data files and return their content as map of list of
+" strings.
 function! s:ReadDataFiles(sourcesFileName, classesFileName, glossaryFileName)
     let path1 = s:script_path . "/" . a:sourcesFileName
     let path2 = s:script_path . "/" . a:classesFileName
@@ -37,6 +41,8 @@ function! s:ParseWord(sources, classes, inputLine)
         return {}
     endif
 
+    " class field contains just a foreign key to the CLASSES table
+    " source field contains just a foreign key to the SOURCES table
     return {"term" :        l1[2],
            \"description" : l1[3],
            \"class"       : a:classes[l1[4]-1],
@@ -57,12 +63,15 @@ function! s:ParseGlossary(sources, classes, glossaryTextFile)
     return terms
 endfunction
 
+" Split the given string (content of text line) into words and return number
+" of words.
 function! s:GetNumWordsInTerm(term)
     let words = split(a:term, " ")
     let numWords = len(words)
     return numWords
 endfunction
 
+" Return maximum number of words found in (any) term in the glossary.
 function! s:GetMaxWordsInTerms(glossary)
     let maxWords = 0
     for g in a:glossary
@@ -74,6 +83,8 @@ function! s:GetMaxWordsInTerms(glossary)
     return maxWords
 endfunction
 
+" Setup function to be called automatically: read data files, parse glossary,
+" and compute max number of words found in the glossary.
 function! s:Setup()
     let s:dataFiles = s:ReadDataFiles("sources.txt", "classes.txt", "glossary.txt")
     let s:glossary = s:ParseGlossary(s:dataFiles.sources, s:dataFiles.classes, s:dataFiles.glossary)
