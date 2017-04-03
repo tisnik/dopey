@@ -1,3 +1,17 @@
+" ============================================================================
+" Maintainer:  Pavel Tisnovsky <ptisnovs@redhat.com>
+" Last Change: 03 May 2017
+" ============================================================================
+
+" Exit immediately if the plugin was already loaded, the editor is running in
+" vi-compatible mode, or if the editor is too old:
+if exists("g:loaded_dopey") || &cp || version < 700
+  finish
+end
+let g:loaded_dopey = 1
+
+" Enable debug messages:
+let s:debug = 0
 
 " The s:script_path variable must be initialized OUTSIDE any function. For
 " further information Please see :help fnamemodify :help filename-modifers
